@@ -1,0 +1,371 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{amssymb,amsmath,amsthm,amsfonts}
+\usepackage{multicol,multirow}
+\usepackage{calc}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{ifthen}
+\usepackage[utf8]{inputenc}
+\usepackage[landscape]{geometry}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
+
+
+%\newcounter{nalg}[chapter] % defines algorithm counter for chapter-level
+%\renewcommand{\thenalg}{\thechapter .\arabic{nalg}} %defines appearance of the algorithm counter
+\DeclareCaptionLabelFormat{algocaption}{Algorithm \thenalg} % defines a new caption label as Algorithm x.y
+
+\lstnewenvironment{algorithm}[1][] %defines the algorithm listing environment
+{   
+    %\refstepcounter{nalg} %increments algorithm number
+    %\captionsetup{labelformat=algocaption,labelsep=colon} %defines the caption setup for: it ises label format as the declared caption label above and makes label and caption text to be separated by a ':'
+    \lstset{ %this is the stype
+        mathescape=true,
+        %frame=tB,
+        %numbers=left, 
+        numberstyle=\tiny,
+        basicstyle=\scriptsize, 
+        keywordstyle=\color{black}\bfseries\em,
+        keywords={,vhod, izhod, vrni, dokler, izvajaj, konec, zanke} %add the keywords you want, or load a language as Rubens explains in his comment above.
+        %numbers=left,
+        %xleftmargin=.04\textwidth,
+        %#1 % this is to add specific settings to an usage of this environment (for instnce, the caption and referable label)
+    }
+}
+{}
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+
+% -----------------------------------------------------------------------
+
+\title{Diskretne strukture}
+
+\begin{document}
+
+\raggedright
+\footnotesize
+
+\begin{multicols}{3}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\section{Relacije}
+Naj bo $A$ neka množica. Podmnožici $R \subseteq A \times A$ rečemo \emph{relacija} na množici $A$.
+Če je $(x, y) \in R$, pišemo $xRy$.
+
+\[R(x) = \{y \in A : xRy\}\]
+\[R^{-1}(y) = \{x \in A : yRx\}\]
+
+\emph{Definicijsko območje:}
+\[D_R = \{x \in A: R(x) \neq 0\}\]
+\emph{Zaloga vrednosti:}
+\[Z_R = \{y \in A: R^{-1}(y) \neq 0\}\]
+
+\emph{Graf relacije} $R \subseteq A^2$ je slika na kateri vsakemu elementu iz $A$ pripada svoja točka za vask par $(x, y) \in R$ pa naredimo puščico iz $x \to y$.
+
+\subsection{Operacije na relacijah}
+\emph{Komplement}
+\[\overline{R} = A^2 - R \]
+\emph{Inverz}
+\[ xR^{-1}y \Leftrightarrow yRy\]
+\emph{Kompozitum}
+ \[x(R\circ T)y \Leftrightarrow \exists z \in A : xTz \wedge zRy \]
+
+\subsection{Lastnosti relacij}
+
+$R$ je \emph{refleksinva} $\Leftrightarrow$ $\forall x \in A : xRx$
+
+$R$ je \emph{irefleksinva} $\Leftrightarrow$ $\forall x \in A : \neg (xRx) $
+
+$R$ je \emph{simetrična} $\Leftrightarrow$ $\forall x, y \in A : xRy \Rightarrow yRx$
+
+$R$ je \emph{asimetrična} $\Leftrightarrow$ $\forall x, y \in A : xRy \Rightarrow \neg (yRx)$
+
+$R$ je \emph{antisimetrična} $\Leftrightarrow$ $\forall x, y \in A : xRy \Rightarrow \neg (yRx) \vee x=y$
+
+$R$ je \emph{tranzitivna} $\Leftrightarrow$ $\forall x, y, z \in A : xRy \wedge yRz \Rightarrow xRz$
+
+$R$ je \emph{sovisna} $\Leftrightarrow$ $\forall x, y \in A : xRy \vee yRx \vee x=y$
+
+$R$ je \emph{strogosovisna} $\Leftrightarrow$ $\forall x, y \in A : xRy \vee yRx$
+
+$R$ je \emph{enolična} $\Leftrightarrow$ $\forall x, y, z \in A : xRy \wedge xRz \Rightarrow y=z$
+
+\subsection{Ekvivalenčne relacije}
+Relacija je ekvivalenčna, če je \emph{refleksivna}, \emph{simetrična} in \emph{tranzitivna}.
+\subsubsection{Ekvivalenčni razred}
+Naj bo $R$ ekvivalenčna relacija. $R(a)$ je ekvivalenčni razred elementa $a$.
+\[a \in A: R(a) = \{b \in A: aRb\}\]
+Množica ekvivalenčnih razredov glede na $R$:
+\[A_{/R} = \{R(a): a \in A\}\]
+
+\subsection{Relacije urejenosti}
+Vsaki \emph{tranzitivni} relaciji rečemo relacija urejenosti. Naj bo $R$ tranzitivno:
+\begin{itemize}
+    \item $R$ je \textbf{delna urejenost}, če je \emph{refleksivna} in \emph{antisimetrična}
+    \item $R$ je \textbf{linearna urejenost}, če je \emph{antisimetrična} in \emph{strogo sovisna} (in zato tudi refleksivna)
+    \item $R$ je \textbf{stroga delna urejenost}, če je \emph{asimetrilna} (in zato irefleksivna)
+    \item $R$ je \textbf{stroga linearna urejenost}, če je \emph{asimetrilna} in \emph{sovisna}
+    \item $R$ je \textbf{dobra urejenost}, če je \emph{linearna urejenost} in ima vasaka podmnožica svoj \emph{minimum}
+\end{itemize}
+
+\bigbreak
+Naj bo $R$ relacija urejenosti na $A$ in $X \subseteq A$:
+
+\begin{itemize}
+    \item Element $a \in A$ je \textbf{zgornja meja} za $X$, če velja $\forall x \in X: xRa$.
+    \item Element $a \in A$ je \textbf{spodnja meja} za $X$, če velja $\forall x \in X: aRx$.
+    \item Zgornja meja $a \in X$ je \textbf{natančna zgornja meja}/supremum, če za vsako zgornjo mejo $b$ množice $X$ velja $a=b \vee aRb$.
+    \item Spodnja meja $a \in X$ je \textbf{natančna spodnja meja}/infimum, če za vsako spodnjo mejo $b$ množice $X$ velja $a=b \vee bRa$.
+    \item \textbf{maksimum} je taka \emph{natančna zgornja meja}, ki je vsebovana v množici $X$.
+    \item \textbf{minimum} je taka \emph{natančna spodnja meja}, ki je vsebovana v množici $X$.
+\end{itemize}
+
+\section{Funkcije}
+\emph{Enolični relaciji} $R$ na $A$ rečemo tudi funkcija.
+\[R: D_R \rightarrow A\]
+
+Relacija $R \subseteq A^2$ je:
+\begin{itemize}
+    \item \textbf{injektivna} $\Leftrightarrow$ $\forall x, y, z \in A : xRy \wedge zRy \Rightarrow x=z$
+    \item \textbf{surjektivna} $\Leftrightarrow$ $Z_R = A$
+    \item \textbf{bijektivna} $\Leftrightarrow$ injektivna in surjektivna
+\end{itemize}
+
+Funkcija $R$ ima inverz $\Leftrightarrow$ ko je $R$ \emph{injektivna}
+
+\subsection{Moč množic}
+Množici $A$, $B$ sta eneko močni (ekvipotentni, imata isto kardinalnost), če obstaja bijektivna preslikava iz $A$ v $B$. Pišemo $|A|=|B|$.
+
+Množica $A$ je \emph{neskončna} $\Leftrightarrow$ $\exists B \subset A : |A|=|B|$
+
+\[|A| \leq |B| \Leftrightarrow \exists f : A \rightarrow B\text{, ki je injektivna}\]
+\[|A| \leq |B| \Leftrightarrow \exists f : B \rightarrow A\text{, ki je surjektivna}\]
+
+
+\section{Teorija števil}
+\[a|b \Leftrightarrow \exists k : b = ka\]
+Deleitelji števila $a$:
+\[D(a) = \{m \in \mathbb{Z} : m|a\}\]
+\[D^+(a) = \{m \in \mathbb{N} : m|a\}\]
+Večkratniki števila $a$:
+\[V(a) = \{b \in \mathbb{Z} : a|b\} = \{ka: k \in \mathbb{Z}\}\]
+\emph{Največji skupni delitelj}
+\[\textrm{gcd}(a, b) = \textrm{max}(D^+(a) \cap D^+(b))\]
+\emph{Najmanjši skupni večkratniki}
+\[\textrm{lcm}(a, b) = \textrm{min}(V^+(a) \cup V^+(b))\]
+
+Če za $a, b \in \mathbb{Z} - \{0\}$ velja $\textrm{gcd}(a, b) = 1$, sta si $a$ in $b$ \textbf{tuji števili}.
+
+\[ \textrm{gcd}(a, b) \cdot \textrm{lcm}(a, b) = a \cdot b \]
+
+\[a, b, c \in \mathbb{Z} - \{0\} : \textrm{gcd}(a, b) = 1 \wedge a | bc \Rightarrow a | c\]
+\[a, b, c \in \mathbb{Z} - \{0\} : c | a \wedge c | b \Rightarrow \textrm{gcd} \left( \frac{a}{c}, \frac{b}{c} \right) = \frac{\textrm{gcd}(a,b)}{c}\]
+\[\textrm{gcd} \left( \frac{a}{\textrm{gcd}(a, b)}, \frac{b}{\textrm{gcd}(a, b)} \right) = 1\]
+
+\subsubsection{Praštevila}
+Če sta edina pozitivna delitelja naravnega števila $n \geq 2$ $1$ in $n$, je $n$ \textbf{praštevilo}. Množica preštevil:
+\[\mathbb{P} = \{2,3,5,7,11,...\}\]
+
+\subsubsection{Razcep na prafaktorje}
+Vsak $n \geq 2$ lahko zapišemo kot produkt praštevil $p_1,..., p_m$:
+\[n = p_1^{\alpha_1} \cdot p_2^{\alpha_2} \cdot ... \cdot p_m^{\alpha_m}\]
+
+\subsection{Linearne diofantske enačbe}
+Diofantska enačba $ax + by = c$ ima rešitev $\Leftrightarrow$ $gcd(a, b) | c$. 
+
+Če ima eno rešitev $(x_0, y_0) \in \mathbb{Z}^2$ ima neskončno množico rešitev:
+\[\{(x_k, y_k) : k \in \mathbb{Z}\}\]
+\[x_k = x_0 - k\frac{b}{\textrm{gcd(a, b)}}\]
+\[y_k = y_0 + k\frac{a}{\textrm{gcd(a, b)}}\]
+
+\subsubsection{Razširjen evklidov algoritem}
+
+\begin{algorithm}
+vhod: $(a, b)$
+($r_0$, $x_0$, $y_0$) = ($a$, 1, 0)
+($r_1$, $x_1$, $y_1$) = ($b$, 0, 1)
+$i$ = 1
+
+dokler $r_i$ $\neq$ 0:
+    $i$ = $i$+1
+    $k_i$ = $r_{i-2} // r_{i-1}$
+    $(r_i, x_i, y_i)$ = $(r_{i-2}, x_{i-2}, y_{i-2}) - k_i(r_{i-1}, x_{i-1}, y_{i-1})$
+konec zanke
+vrni: $(r_{i-1}, x_{i-1}, y_{i-1})$
+\end{algorithm}
+
+Naj bosta $a, b \in \mathbb{Z}$. Tedaj trojica $(d, x, y)$, ki jo vrne razširjen evklidov algoritem z vhodnim podatkomk $(a, b)$, zadošča:
+\[ax + by = d \text{ in } d = \textrm{gcd}(a, b)\] 
+
+\section{Modularna aritmetika}
+\emph{Kongurenca}
+\[a \equiv_m b \Leftrightarrow m | (b-a)\]
+
+\[a \equiv_m b \Leftrightarrow a \textrm{ mod } m = b \textrm{ mod } m \]
+
+\[r = x \textrm{ mod } m \Leftrightarrow r \equiv_m x \text{ in } r \in \{0,1,...,m-1\} \]
+
+Če je $x_1 \equiv_m y_1$ in $x_2 \equiv_m y_2$:
+\[x_1 + x_2 \equiv_m y_1 + y_2\]
+\[x_1 x_2 \equiv_m y_1 y_2\]
+\[x_1^r \equiv_m y_1^r\]
+
+Če je $ax \equiv_m ay$:
+\[x \equiv y \left(\textrm{mod} \frac{m}{\textrm{gcd}(a, m)}\right)\]
+\subsection{Kolobar ostankov}
+\[\mathbb{Z}_m = \{0,1,...,m-1\}\]
+\[a, b \in \mathbb{Z}_m\]
+
+$a \bigoplus b = (a + b) \textrm{ mod } m \text{ $\sim$ } a + b$
+
+$a \bigodot b = (a b) \textrm{ mod } m \text{ $\sim$ } ab$ 
+
+\bigbreak
+$(\mathbb{Z}_m, +, \cdot)$ je kolobar ostankov po mod $m$
+\begin{itemize}
+    \item Operaciji $+$ in $\cdot$ sta asociativni, distributivni in komutativni
+    \item $0$ je enota za $+$ in $1$ je enota za $\cdot$
+    \item vsak $a \in \mathbb{Z}_m$ ima nasprotni element ($-a$)
+\end{itemize}
+\[ -a = 
+\begin{cases}
+m-a; a \neq 0 \\
+0; a = 0
+\end{cases}
+\]
+
+Naj bo $a \in \mathbb{Z}_m$. Če obstaja $b \in \mathbb{Z}_m$, za katerega je
+$ab = 1$ v $\mathbb{Z}_m$
+potem je $a$ \emph{obrnljiv} in $b$ njegov \emph{inverz} (v $\mathbb{Z}_m$).
+
+Množico vseh obrnlivih elementov v $\mathbb{Z}_m$ označimo $\mathbb{Z}_m^*$.
+\[a \in \mathbb{Z}_m^* \Leftrightarrow a \text{ je tuj } m\]
+
+Inverz od $a$ je tisti $x \in \mathbb{Z}_m$, ki (skupaj z nekim $y$) reši diofantsko enačbo $ax + (-m)y = 1$ 
+
+Vsak element $\mathbb{Z}_m^*$ ima natanko en inverz. Označimo ga z $a^{-1}$.
+
+\subsection{Euljerjeva funkcija}
+Euljerjeva funkcija nam pove koliko je obrnlivih elementov v $\mathbb{Z}_m$.
+\[\varphi(m) = 
+\begin{cases}
+|\{a \in \mathbb{Z}_m - \{0\} : \textrm{gcd}(a,m)=1\}|; m \geq 2 \\
+1; m = 1
+\end{cases}
+\]
+
+\[\varphi(p^k) = (p-1)p^{k-1} = p^k\left(1-\frac{1}{p}\right); p \in \mathbb{P}\]
+
+Za $n \in \mathbb{N}$ s paraštevilskim razcepom $ n = p_1^{\alpha_1} \cdot ... \cdot p_m^{\alpha_m}$ velja:
+\[\varphi(n) = \varphi(p_1^{\alpha_1}) \cdot ... \cdot \varphi(p_m^{\alpha_m}) = n \prod_{ p_k \in \mathbb{P}} \left(1-\frac{1}{p_k} \right) \]
+
+\textbf{Euljerjev izrek:}
+\[\textrm{gcd}(a, m) = 1 \Leftrightarrow a^{\varphi(m)} \equiv_m 1; a \in \mathbb{Z}_m^*\]
+\[a,m \in \mathbb{N} \wedge \textrm{gcd}(a, m) = 1 \Rightarrow a^{\varphi(m)} \equiv_m 1\]
+\[a^{\varphi(m)} = 1 \text{ v } \mathbb{Z}_m^*\]
+
+\textbf{Mali Fermatov izrek:} če je $m \in \mathbb{P}$ ($\varphi(m) = m-1$) in $\textrm{gcd}(a,m) = 1$, potem:
+\[a^{m-1} \equiv_m 1\]
+
+\section{RSA}
+$A$ želi varno prejeti sporočilo od $B$.
+\begin{itemize}
+    \item $A$ izbere praštevili $p$ in $q$
+    \item $A$ izračuna $n = pq$ in $\varphi = \varphi(n) = (p-1)(q-1)$
+    \item $A$ izbere $e \in \mathbb{Z}_{\varphi}^*$, ki je tuje $\varphi$
+    \item $A$ izračuna $d = e^{-1}$ (reši diofantsko enačbo $ex - \varphi y = 1$ za $x=d$ in $y$)
+    \item $A$ javno objavi $(n, e)$ in si naskrivaj zapomni $d$
+    \item $B$ sestavi sporočilo $m$
+    \item $B$ izračuna $m' = m^e \textrm{ mod } n$
+    \item $B$ pošlje $m'$
+    \item $A$ izračuna $m'' = m'^d \textrm{ mod } n$ 
+\end{itemize}
+Izkaže se, da je $m''$ enak $m$
+
+\section{Permutacije}
+Permutacija množice $\Omega$ je bijektivna preslikava $\pi: \Omega \rightarrow \Omega$
+$\textrm{Sym}(\Omega)$ je množica vseh permutacij na $\Omega$.
+\[|\textrm{Sym}(\Omega)| = |\Omega|!\]
+\[S_n = \textrm{Sym}(\Omega); \Omega = \{1,2,...,n\}\]
+
+\subsubsection{Ciklična struktura}
+Multimnožica doložin ciklov.
+
+\begin{itemize}
+    \item \textbf{negibne točke}: cilki dolžine 1
+    \item \textbf{transpozicije}: cilki dolžine 2
+    \item \textbf{k-cikli}: cilki dolžine k
+\end{itemize}
+
+\textbf{Ciklična premutacija} je taka premutacija kjer je največ en cikel dolžine več kot 1. (ostali pa so dolžine 1)
+
+\subsubsection{Produkt permutacij}
+\[(\pi \cdot \varphi)(\omega) = (\varphi \circ \pi)(\omega) = \varphi\left(\pi(\omega)\right) \]
+\[\pi(\omega) = \omega^{\pi}\]
+\[(\pi \cdot \varphi)(\omega) = \omega^{(\pi \cdot \varphi)} = \left(\omega^{\pi}\right)^{\varphi} = \omega^{\pi \varphi}\]
+
+
+\textbf{Nosilec}
+
+Naj bo $\pi \in \textrm{Sym}(\Omega)$.
+\[\textrm{supp}(\pi) = \{\omega \in \Omega : \omega^{\pi} \neq \omega\}\]
+\[\omega \in \textrm{supp}(\pi) \Leftrightarrow \omega^{\pi} \in \textrm{supp}(\pi) \]
+
+$\pi, \varphi \in \textrm{Sym}(\Omega)$ sta \textbf{disjunktni} permutaciji, če
+\[\textrm{supp}(\pi) \cap \textrm{supp}(\varphi) = \emptyset\]
+
+Če sta permutaciji $\pi, \varphi \in \textrm{Sym}(\Omega)$ disjunktni, \textbf{komutirata} ($\pi \cdot \varphi = \varphi \cdot \pi$).
+
+\subsubsection{Red permutacije}
+Red permutacije $\alpha \in S_n$ je najmanjše število $k$, da je
+\[\alpha^k = \textrm{id}\]
+
+\subsubsection{Inverzije}
+$\varphi \in S_n$, par števil $i,j$ ($1\leq i < j \leq n)$ je v \emph{inverzu} v permutaciji $\varphi$, če se v spodnji vrstici zapisa parmutacije $\varphi$ s tabelo pojavita v "napačnem" vrstnem redu: večje število je zapisano bolj levo od manjšega.
+
+Število inverzi permutacije $\varphi$ označimo z $\textrm{inv}(\varphi)$.
+\bigbreak
+Denimo, da je $\varphi$ permutacija in $\tau$ transpozicija, potem velja:
+\[\textrm{inv}(\varphi) \not\equiv_2 \textrm{inv}(\varphi \cdot \tau)\]
+\bigbreak
+Permutacija $\varphi \in S_n$ je soda $\Leftrightarrow$ $\textrm{inv}(\varphi)$ sodo.
+
+Permutacija $\varphi \in S_n$ je liha $\Leftrightarrow$ $\textrm{inv}(\varphi)$ liho.
+\bigbreak
+Vsako permutacijo lahko zapišemo kot produkt transpozicij.
+\[\pi = (13927)(4658) = (13)(19)(12)(17)(46)(45)(48)\]
+\[(1\ 2\ 3\ ...\ n) = (1\ 2)(1\ 3)...(1\ n)\]
+
+Permutacija je \textbf{soda}, če je $n$ lih.
+
+Permutacija je \textbf{liha}, če je $n$ sod.
+\end{multicols}
+\end{document}
